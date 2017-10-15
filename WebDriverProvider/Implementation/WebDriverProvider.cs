@@ -6,7 +6,7 @@ namespace WebDriverProvider.Implementation
 {
     public class WebDriverProvider
     {
-	    public async Task<DirectoryInfo> GetDriverBinary(Browser browser, DriverType driverType)
+	    public async Task<DirectoryInfo> GetDriverBinary(Browser browser, DriverType driverType, DriverDownloadPolicy driverDownloadPolicy)
 	    {
 		    var driverProvider = CreateDriverProvider(driverType);
 		    var binaryLocation = await driverProvider.GetDriverBinary();
@@ -50,7 +50,7 @@ namespace WebDriverProvider.Implementation
 		    var chromeDriverSite = new ChromeDriverSite();
 		    var versionDetector = new ChromeVersionDetector();
 		    var releaseNotesParser = new ChromeDriverReleaseNotesParser();
-		    var latestDriverVersionFinder = new CompatibleDriverVersionFinder(
+		    var compatibleDriverVersionFinder = new CompatibleDriverVersionFinder(
 				chromeLatestReleaseFinder,
 				versionDetector,
 				httpClientWrapper,
@@ -59,7 +59,7 @@ namespace WebDriverProvider.Implementation
 			);
 		    var driverDownloader = new DriverDownloader(httpClientWrapper, fileSystemWrapper);
 		    var provider = new ChromeDriverProvider(
-			    latestDriverVersionFinder,
+			    compatibleDriverVersionFinder,
 			    driverDownloader,
 			    fileSystemWrapper
 		    );

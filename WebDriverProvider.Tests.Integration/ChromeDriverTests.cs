@@ -18,7 +18,7 @@ namespace WebDriverProvider.Tests.Integration
 	    public async Task should_get_latest_chrome_driver_and_run_selenium_go_to_url()
 	    {
 			//when
-		    var driverDirectory = await _webDriverProvider.GetDriverBinary(Browser.Chrome, DriverType.Latest);
+		    var driverDirectory = await _webDriverProvider.GetDriverBinary(Browser.Chrome, DriverType.Latest, DriverDownloadPolicy.Always);
 			
 			//then
 			Assert.DoesNotThrow(() =>
@@ -34,7 +34,7 @@ namespace WebDriverProvider.Tests.Integration
 	    public async Task should_get_compatible_chrome_driver_and_run_selenium_go_to_url()
 	    {
 		    //when
-		    var driverDirectory = await _webDriverProvider.GetDriverBinary(Browser.Chrome, DriverType.LatestCompatible);
+		    var driverDirectory = await _webDriverProvider.GetDriverBinary(Browser.Chrome, DriverType.LatestCompatible, DriverDownloadPolicy.Always);
 
 		    //then
 		    Assert.DoesNotThrow(() =>
