@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
 
@@ -6,19 +7,17 @@ namespace WebDriverProvider.Tests.Integration
 {
     public class ChromeDriverTests
     {
-	    private Implementation.WebDriverProvider _webDriverProvider;
-
-	    [SetUp]
-	    public void Setup()
-	    {
-			_webDriverProvider = new Implementation.WebDriverProvider();
-		}
-
 		[Test]
 	    public async Task should_get_latest_chrome_driver_and_run_selenium_go_to_url()
 	    {
+			//given
+		    var driverProvider = ProviderConfiguration.For(Browser.Chrome)
+				.WithDesiredDriver(DesiredDriver.Latest)
+			    .WithRefreshPolicy(RefreshPolicy.Always)
+				.BuildDriverProvider();
+		    
 			//when
-		    var driverDirectory = await _webDriverProvider.GetDriverBinary(Browser.Chrome, DriverType.Latest, DriverDownloadPolicy.Always);
+		    var driverDirectory = await driverProvider.GetDriverBinary();
 			
 			//then
 			Assert.DoesNotThrow(() =>
@@ -33,8 +32,14 @@ namespace WebDriverProvider.Tests.Integration
 	    [Test]
 	    public async Task should_get_compatible_chrome_driver_and_run_selenium_go_to_url()
 	    {
-		    //when
-		    var driverDirectory = await _webDriverProvider.GetDriverBinary(Browser.Chrome, DriverType.LatestCompatible, DriverDownloadPolicy.Always);
+		    //given
+		    var driverProvider = ProviderConfiguration.For(Browser.Chrome)
+			    .WithDesiredDriver(DesiredDriver.LatestCompatible)
+			    .WithRefreshPolicy(RefreshPolicy.Always)
+			    .BuildDriverProvider();
+
+			//when
+		    var driverDirectory = await driverProvider.GetDriverBinary();
 
 		    //then
 		    Assert.DoesNotThrow(() =>
@@ -45,5 +50,10 @@ namespace WebDriverProvider.Tests.Integration
 			    }
 		    });
 	    }
+
+	    //[Test]
+	    //public async Task driver_file_should_be_unchanged_when_driver_not_present_policy_is_applied()
+	    //{
+	    //}
 	}
 }

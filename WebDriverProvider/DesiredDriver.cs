@@ -1,6 +1,6 @@
 ﻿namespace WebDriverProvider
 {
-	public enum DriverType
+	public enum DesiredDriver
 	{
 		Latest,
 		LatestCompatible

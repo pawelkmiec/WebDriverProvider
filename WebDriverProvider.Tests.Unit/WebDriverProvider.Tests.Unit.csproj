@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="ChromeDriverProviderTests.cs" />
     <Compile Include="ChromeDriverReleaseNotesParserTests.cs" />
+    <Compile Include="RefreshPolicy\DefaultRefreshPolicyTests.cs" />
     <Compile Include="DriverDownloaderTests.cs" />
     <Compile Include="LatestDriverVersionFinderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,5 +72,6 @@
       <Name>WebDriverProvider</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

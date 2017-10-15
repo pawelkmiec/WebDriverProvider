@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace WebDriverProvider.Implementation
 {
-	public class CompatibleDriverVersionFinder : IDriverVersionFinder
+	public class ChromeCompatibleDriverVersionFinder : IDriverVersionFinder
 	{
 		private readonly IChromeLatestReleaseFinder _releasefinder;
 		private readonly IChromeVersionDetector _versionDetector;
@@ -11,7 +11,7 @@ namespace WebDriverProvider.Implementation
 		private readonly IChromeDriverReleaseNotesParser _releaseNotesParser;
 		private readonly IChromeDriverSite _chromeDriverSite;
 
-		public CompatibleDriverVersionFinder(
+		public ChromeCompatibleDriverVersionFinder(
 			IChromeLatestReleaseFinder releasefinder, 
 			IChromeVersionDetector versionDetector, 
 			IHttpClientWrapper httpClientWrapper, 
@@ -26,7 +26,7 @@ namespace WebDriverProvider.Implementation
 			_chromeDriverSite = chromeDriverSite;
 		}
 
-		public async Task<Uri> GetDriverUrl()
+		public async Task<Uri> FindDriverUrl()
 		{
 			var latestRelease = await _releasefinder.Find();
 			var latestReleaseNotesUrl = _chromeDriverSite.GetReleaseNotesUrl(latestRelease);

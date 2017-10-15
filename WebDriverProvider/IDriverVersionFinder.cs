@@ -5,6 +5,6 @@ namespace WebDriverProvider
 {
 	public interface IDriverVersionFinder
 	{
-		Task<Uri> GetDriverUrl();
+		Task<Uri> FindDriverUrl();
 	}
 }

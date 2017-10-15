@@ -13,7 +13,7 @@ namespace WebDriverProvider.Tests.Unit
 		private Mock<IHttpClientWrapper> _httpClientWrapper;
 		private Mock<IChromeDriverReleaseNotesParser> _releaseNotesParser;
 		private Mock<IChromeDriverSite> _chromeDriverSite;
-		private CompatibleDriverVersionFinder _versionFinder;
+		private ChromeCompatibleDriverVersionFinder _versionFinder;
 
 		[SetUp]
 		public void Setup()
@@ -23,7 +23,7 @@ namespace WebDriverProvider.Tests.Unit
 			_httpClientWrapper = new Mock<IHttpClientWrapper>();
 			_releaseNotesParser = new Mock<IChromeDriverReleaseNotesParser>();
 			_chromeDriverSite = new Mock<IChromeDriverSite>();
-			_versionFinder = new CompatibleDriverVersionFinder(
+			_versionFinder = new ChromeCompatibleDriverVersionFinder(
 				_releaseFinder.Object, 
 				_versionDetector.Object, 
 				_httpClientWrapper.Object,
@@ -44,7 +44,7 @@ namespace WebDriverProvider.Tests.Unit
 				.Returns(releaseNotesUrl);
 
 			//when
-			await _versionFinder.GetDriverUrl();
+			await _versionFinder.FindDriverUrl();
 
 			//then
 			_httpClientWrapper.Verify(v => v.GetStringAsync(releaseNotesUrl));
@@ -67,7 +67,7 @@ namespace WebDriverProvider.Tests.Unit
 			_versionDetector.Setup(v => v.Detect()).Returns(detectedChromeVersion);
 
 			//when
-			await _versionFinder.GetDriverUrl();
+			await _versionFinder.FindDriverUrl();
 
 			//then
 			_releaseNotesParser.Verify(v => v.FindCompatibleDriverVersion(releaseNotes, detectedChromeVersion));
@@ -86,7 +86,7 @@ namespace WebDriverProvider.Tests.Unit
 				.Returns(driverZipUrl);
 
 			//when
-			var result = await _versionFinder.GetDriverUrl();
+			var result = await _versionFinder.FindDriverUrl();
 
 			//then
 			Assert.That(result, Is.EqualTo(driverZipUrl));

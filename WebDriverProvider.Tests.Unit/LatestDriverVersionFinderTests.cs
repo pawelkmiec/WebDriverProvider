@@ -14,7 +14,7 @@ namespace WebDriverProvider.Tests.Unit
 			//given
 		    var latestReleaseFinder = new Mock<IChromeLatestReleaseFinder>();
 		    var chromeDriverSite = new Mock<IChromeDriverSite>();
-		    var finder = new LatestDriverVersionFinder(latestReleaseFinder.Object, chromeDriverSite.Object);
+		    var finder = new ChromeLatestDriverVersionFinder(latestReleaseFinder.Object, chromeDriverSite.Object);
 
 		    var latestRelease = "2.33";
 		    latestReleaseFinder.Setup(s => s.Find()).ReturnsAsync(latestRelease);
@@ -24,7 +24,7 @@ namespace WebDriverProvider.Tests.Unit
 			    .Returns(driverUrl);
 
 			//when
-			var result = await finder.GetDriverUrl();
+			var result = await finder.FindDriverUrl();
 
 			//then
 			Assert.That(result, Is.EqualTo(driverUrl));

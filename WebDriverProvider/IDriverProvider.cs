@@ -5,6 +5,6 @@ namespace WebDriverProvider
 {
 	public interface IDriverProvider
 	{
-		Task<FileInfo> GetDriverBinary();
+		Task<DirectoryInfo> GetDriverBinary();
 	}
 }

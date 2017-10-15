@@ -69,5 +69,10 @@ namespace WebDriverProvider.Implementation
 		{
 			file.Delete();
 		}
+
+		public bool FileExists(string fileName, DirectoryInfo directory)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
