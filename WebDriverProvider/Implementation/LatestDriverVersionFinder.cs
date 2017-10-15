@@ -5,19 +5,20 @@ namespace WebDriverProvider.Implementation
 {
 	public class LatestDriverVersionFinder : IDriverVersionFinder
 	{
-		private readonly IHttpClientWrapper _httpClientWrapper;
+		private readonly IChromeLatestReleaseFinder _latestReleaseFinder;
+		private readonly IChromeDriverSite _chromeDriverSite;
 
-		public LatestDriverVersionFinder(IHttpClientWrapper httpClientWrapper)
+		public LatestDriverVersionFinder(IChromeLatestReleaseFinder latestReleaseFinder, IChromeDriverSite chromeDriverSite)
 		{
-			_httpClientWrapper = httpClientWrapper;
+			_latestReleaseFinder = latestReleaseFinder;
+			_chromeDriverSite = chromeDriverSite;
 		}
 
 		public async Task<Uri> GetDriverUrl()
 		{
-			var chromeDriverHost = "chromedriver.storage.googleapis.com";
-			var latestRelease = await _httpClientWrapper.GetStringAsync(new Uri($"http://{chromeDriverHost}/LATEST_RELEASE"));
-			var relaseUrl = new Uri($"http://{chromeDriverHost}/{latestRelease}/chromedriver_win32.zip");
-			return relaseUrl;
+			var latestRelease = await _latestReleaseFinder.Find();
+			var latestDriverUrl = _chromeDriverSite.GetDriverZipUrl(latestRelease);
+			return latestDriverUrl;
 		}
 	}
 }

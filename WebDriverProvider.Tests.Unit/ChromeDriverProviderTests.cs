@@ -3,10 +3,9 @@ using System.IO;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using WebDriverProvider;
 using WebDriverProvider.Implementation;
 
-namespace NWebDriverManager.Tests.Unit
+namespace WebDriverProvider.Tests.Unit
 {
 	public class ChromeDriverProviderTests
 	{

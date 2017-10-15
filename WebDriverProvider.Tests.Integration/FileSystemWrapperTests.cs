@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WebDriverProvider.Implementation;
 
-namespace NWebDriverManager.Tests.Integration
+namespace WebDriverProvider.Tests.Integration
 {
 	public class FileSystemWrapperTests
 	{

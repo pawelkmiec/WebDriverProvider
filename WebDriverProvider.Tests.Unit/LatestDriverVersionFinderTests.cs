@@ -2,46 +2,34 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using WebDriverProvider;
 using WebDriverProvider.Implementation;
 
-namespace NWebDriverManager.Tests.Unit
+namespace WebDriverProvider.Tests.Unit
 {
     public class LatestDriverVersionFinderTests
     {
-	    private LatestDriverVersionFinder _finder;
-	    private Mock<IHttpClientWrapper> _httpClientWrapper;
-
-	    [SetUp]
-	    public void Setup()
-	    {
-		    _httpClientWrapper = new Mock<IHttpClientWrapper>();
-		    _finder = new LatestDriverVersionFinder(_httpClientWrapper.Object);
-
-		    _httpClientWrapper.Setup(s => s.GetStringAsync(It.IsAny<Uri>())).ReturnsAsync("1.111");
-		}
-
-		[Test]
-	    public async Task should_get_latest_release()
-	    {
-			//when
-		    await _finder.GetDriverUrl();
-
-			//then
-		    _httpClientWrapper.Verify(s => s.GetStringAsync(new Uri("http://chromedriver.storage.googleapis.com/LATEST_RELEASE")));
-	    }
-
 	    [Test]
-	    public async Task should_return_url_with_result_of_latest_release_reqiest()
+	    public async Task should_return_url_to_latest_driver_release()
 	    {
 			//given
-		    _httpClientWrapper.Setup(s => s.GetStringAsync(It.IsAny<Uri>())).ReturnsAsync("2.33");
+		    var latestReleaseFinder = new Mock<IChromeLatestReleaseFinder>();
+		    var chromeDriverSite = new Mock<IChromeDriverSite>();
+		    var finder = new LatestDriverVersionFinder(latestReleaseFinder.Object, chromeDriverSite.Object);
+
+		    var latestRelease = "2.33";
+		    latestReleaseFinder.Setup(s => s.Find()).ReturnsAsync(latestRelease);
+
+		    var driverUrl = new Uri("http://google.com/chromedriver.zip");
+		    chromeDriverSite.Setup(s => s.GetDriverZipUrl(It.IsAny<string>()))
+			    .Returns(driverUrl);
 
 			//when
-			var driverUrl = await _finder.GetDriverUrl();
+			var result = await finder.GetDriverUrl();
 
 			//then
-			Assert.That(driverUrl, Is.EqualTo(new Uri("http://chromedriver.storage.googleapis.com/2.33/chromedriver_win32.zip")));
-	    }
+			Assert.That(result, Is.EqualTo(driverUrl));
+			chromeDriverSite.Verify(v => v.GetDriverZipUrl(latestRelease));
+		    latestReleaseFinder.Verify(s => s.Find());
+		}
     }
 }

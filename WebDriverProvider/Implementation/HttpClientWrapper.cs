@@ -16,8 +16,7 @@ namespace WebDriverProvider.Implementation
 
 	    public async Task<string> GetStringAsync(Uri requestUrl)
 	    {
-		    var result = await _httpClient.GetStringAsync(requestUrl);
-		    return result.Trim();
+		    return await _httpClient.GetStringAsync(requestUrl);
 	    }
 
 	    public async Task<Stream> GetStreamAsync(Uri requestUrl)

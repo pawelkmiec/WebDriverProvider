@@ -1,35 +1,49 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
-using WebDriverProvider.Implementation;
 
-namespace NWebDriverManager.Tests.Integration
+namespace WebDriverProvider.Tests.Integration
 {
     public class ChromeDriverTests
     {
-	    [Test]
-	    public async Task should_get_chrome_binary_and_run_selenium_go_to_url()
+	    private Implementation.WebDriverProvider _webDriverProvider;
+
+	    [SetUp]
+	    public void Setup()
 	    {
-			//given
-		    var provider = new ChromeDriverProvider(
-				new LatestDriverVersionFinder(new HttpClientWrapper()),
-				new DriverDownloader(new HttpClientWrapper(), new FileSystemWrapper()),
-				new FileSystemWrapper()
-			);
+			_webDriverProvider = new Implementation.WebDriverProvider();
+		}
 
-		    var binaryLocation = await provider.GetDriverBinary();
-
-		    var driverDirectory = Path.GetDirectoryName(binaryLocation.FullName);
-
+		[Test]
+	    public async Task should_get_latest_chrome_driver_and_run_selenium_go_to_url()
+	    {
 			//when
-		    var driver = new ChromeDriver(driverDirectory);
+		    var driverDirectory = await _webDriverProvider.GetDriverBinary(Browser.Chrome, DriverType.Latest);
 			
 			//then
 			Assert.DoesNotThrow(() =>
 			{
-				driver.Navigate().GoToUrl("google.com");
+				using (var driver = new ChromeDriver(driverDirectory.FullName))
+				{
+					driver.Navigate().GoToUrl("google.com");
+				}
 			});
 		}
-    }
+
+	    [Test]
+	    public async Task should_get_compatible_chrome_driver_and_run_selenium_go_to_url()
+	    {
+		    //when
+		    var driverDirectory = await _webDriverProvider.GetDriverBinary(Browser.Chrome, DriverType.LatestCompatible);
+
+		    //then
+		    Assert.DoesNotThrow(() =>
+		    {
+			    using (var driver = new ChromeDriver(driverDirectory.FullName))
+			    {
+				    driver.Navigate().GoToUrl("google.com");
+			    }
+		    });
+	    }
+	}
 }
