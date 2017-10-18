@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace WebDriverProvider.Implementation
 {
-	public class ChromeCompatibleDriverVersionFinder : IDriverVersionFinder
+	internal class ChromeCompatibleDriverVersionFinder : IDriverVersionFinder
 	{
 		private readonly IChromeLatestReleaseFinder _releasefinder;
 		private readonly IChromeVersionDetector _versionDetector;

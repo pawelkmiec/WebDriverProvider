@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebDriverProvider.Implementation
 {
-    public class DriverDownloader : IDriverDownloader
+	internal class DriverDownloader : IDriverDownloader
     {
 	    private readonly IHttpClientWrapper _httpClientWrapper;
 	    private readonly IFileSystemWrapper _fileSystemWrapper;

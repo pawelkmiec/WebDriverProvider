@@ -2,7 +2,7 @@
 
 namespace WebDriverProvider.Implementation.RefreshPolicy
 {
-	public class AlwaysRefreshPolicy : IRefreshPolicy
+	internal class AlwaysRefreshPolicy : IRefreshPolicy
 	{
 		public bool ShouldDownload(string driverFileName, DirectoryInfo downloadDirectory)
 		{

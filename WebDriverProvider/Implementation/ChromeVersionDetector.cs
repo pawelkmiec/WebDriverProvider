@@ -3,7 +3,7 @@ using Microsoft.Win32;
 
 namespace WebDriverProvider.Implementation
 {
-    public class ChromeVersionDetector : IChromeVersionDetector
+	internal class ChromeVersionDetector : IChromeVersionDetector
     {
 	    public string Detect()
 	    {

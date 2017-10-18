@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace WebDriverProvider.Implementation
 {
-	public class ChromeDriverReleaseNotesParser : IChromeDriverReleaseNotesParser
+	internal class ChromeDriverReleaseNotesParser : IChromeDriverReleaseNotesParser
 	{
 		public string FindCompatibleDriverVersion(string releaseNotes, string requiredChromeVersion)
 		{

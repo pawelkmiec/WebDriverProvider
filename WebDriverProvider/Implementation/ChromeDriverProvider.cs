@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace WebDriverProvider.Implementation
 {
-	public class ChromeDriverProvider : IDriverProvider
+	internal class ChromeDriverProvider : IDriverProvider
 	{
 		private readonly IDriverVersionFinder _driverVersionFinder;
 		private readonly IDriverDownloader _driverDownloader;

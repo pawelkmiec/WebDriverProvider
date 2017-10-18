@@ -1,6 +1,6 @@
-namespace WebDriverProvider
+namespace WebDriverProvider.Implementation
 {
-	public interface IChromeDriverReleaseNotesParser
+	internal interface IChromeDriverReleaseNotesParser
 	{
 		string FindCompatibleDriverVersion(string releaseNotes, string requiredChromeVersion);
 	}

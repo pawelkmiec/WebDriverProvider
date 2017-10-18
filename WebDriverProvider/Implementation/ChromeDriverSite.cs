@@ -2,7 +2,7 @@
 
 namespace WebDriverProvider.Implementation
 {
-    public class ChromeDriverSite : IChromeDriverSite
+	internal class ChromeDriverSite : IChromeDriverSite
 	{
 	    public Uri GetLatestReleaseUrl()
 	    {

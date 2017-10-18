@@ -2,9 +2,9 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace WebDriverProvider
+namespace WebDriverProvider.Implementation
 {
-	public interface IHttpClientWrapper
+	internal interface IHttpClientWrapper
 	{
 		Task<string> GetStringAsync(Uri requestUrl);
 

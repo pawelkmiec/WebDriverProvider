@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebDriverProvider.Implementation
 {
-	public class FileSystemWrapper : IFileSystemWrapper
+	internal class FileSystemWrapper : IFileSystemWrapper
 	{
 		public DirectoryInfo GetCurrentDirectory()
 		{

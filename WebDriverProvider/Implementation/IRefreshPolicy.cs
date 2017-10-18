@@ -1,8 +1,8 @@
 using System.IO;
 
-namespace WebDriverProvider
+namespace WebDriverProvider.Implementation
 {
-	public interface IRefreshPolicy
+	internal interface IRefreshPolicy
 	{
 		bool ShouldDownload(string driverFileName, DirectoryInfo downloadDirectory);
 	}

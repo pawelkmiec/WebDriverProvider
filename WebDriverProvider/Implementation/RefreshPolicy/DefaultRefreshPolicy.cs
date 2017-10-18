@@ -2,7 +2,7 @@
 
 namespace WebDriverProvider.Implementation.RefreshPolicy
 {
-	public class DefaultRefreshPolicy : IRefreshPolicy
+	internal class DefaultRefreshPolicy : IRefreshPolicy
 	{
 		private readonly IFileSystemWrapper _fileSystemWrapper;
 

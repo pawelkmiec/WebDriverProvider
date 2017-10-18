@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace WebDriverProvider
+namespace WebDriverProvider.Implementation
 {
-	public interface IChromeDriverSite
+	internal interface IChromeDriverSite
 	{
 		Uri GetDriverZipUrl(string version);
 		Uri GetLatestReleaseUrl();

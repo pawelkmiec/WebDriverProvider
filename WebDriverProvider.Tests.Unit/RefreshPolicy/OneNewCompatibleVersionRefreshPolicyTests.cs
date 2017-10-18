@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using NUnit.Framework;
+using WebDriverProvider.Implementation;
 
 namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 {

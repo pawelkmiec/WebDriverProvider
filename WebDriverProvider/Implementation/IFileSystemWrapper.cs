@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace WebDriverProvider
+namespace WebDriverProvider.Implementation
 {
-    public interface IFileSystemWrapper
+	internal interface IFileSystemWrapper
     {
 	    DirectoryInfo GetCurrentDirectory();
 	    Task SaveStream(Stream streamToSave, FileInfo saveFilePath);

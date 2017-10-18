@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebDriverProvider.Implementation
 {
-    public class HttpClientWrapper : IHttpClientWrapper
+	internal class HttpClientWrapper : IHttpClientWrapper
     {
 	    private readonly HttpClient _httpClient;
 
