@@ -61,6 +61,7 @@
     <Compile Include="DriverDownloaderTests.cs" />
     <Compile Include="LatestDriverVersionFinderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RefreshPolicy\OneNewCompatibleVersionRefreshPolicyTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompatibleDriverVersionFinderTests.cs" />

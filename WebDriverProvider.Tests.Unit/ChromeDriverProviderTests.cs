@@ -36,6 +36,9 @@ namespace WebDriverProvider.Tests.Unit
 			_fileSystemWrapper.Setup(s => s.GetCurrentDirectory()).Returns(currentDirectory);
 
 			_downloadPolicy.Setup(s => s.ShouldDownload(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Returns(true);
+
+			var driverLocation = new FileInfo("c:\\foo\\chromedriver.exe");
+			_driverDownloader.Setup(s => s.Download(It.IsAny<Uri>(), It.IsAny<DirectoryInfo>())).ReturnsAsync(driverLocation);
 		}
 
 		[Test]
@@ -79,17 +82,17 @@ namespace WebDriverProvider.Tests.Unit
 		}
 
 		[Test]
-		public async Task should_return_driver_location()
+		public async Task should_return_path_to_driver_directory()
 		{
 			//given
-			var driverLocation = new FileInfo("c:\\temp\\chromedriver.exe");
-			_driverDownloader.Setup(s => s.Download(It.IsAny<Uri>(), It.IsAny<DirectoryInfo>())).ReturnsAsync(driverLocation);
+			var driverFullPath = new FileInfo("c:\\temp\\chromedriver.exe");
+			_driverDownloader.Setup(s => s.Download(It.IsAny<Uri>(), It.IsAny<DirectoryInfo>())).ReturnsAsync(driverFullPath);
 
 			//when
 			var result = await _provider.GetDriverBinary();
 
 			//then
-			Assert.That(result, Is.EqualTo(driverLocation));
+			Assert.That(result, Is.EqualTo(new DirectoryInfo("c:\\temp")));
 		}
 	}
 }
