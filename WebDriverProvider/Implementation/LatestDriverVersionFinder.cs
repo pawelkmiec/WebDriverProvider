@@ -2,11 +2,11 @@ using System.Threading.Tasks;
 
 namespace WebDriverProvider.Implementation
 {
-	internal class ChromeLatestReleaseFinder : IChromeLatestReleaseFinder
+	internal class LatestDriverVersionFinder : ILatestDriverVersionFinder
 	{
 		private readonly IHttpClientWrapper _httpClientWrapper;
 
-		public ChromeLatestReleaseFinder(IHttpClientWrapper httpClientWrapper)
+		public LatestDriverVersionFinder(IHttpClientWrapper httpClientWrapper)
 		{
 			_httpClientWrapper = httpClientWrapper;
 		}

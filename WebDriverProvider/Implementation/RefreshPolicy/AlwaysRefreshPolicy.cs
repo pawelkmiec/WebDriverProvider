@@ -4,7 +4,7 @@ namespace WebDriverProvider.Implementation.RefreshPolicy
 {
 	internal class AlwaysRefreshPolicy : IRefreshPolicy
 	{
-		public bool ShouldDownload(string driverFileName, DirectoryInfo downloadDirectory)
+		public bool ShouldDownload(IWebDriverInfo newDriverInfo, DirectoryInfo downloadDirectory)
 		{
 			return true;
 		}

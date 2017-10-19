@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace WebDriverProvider.Implementation
 {
-	internal interface IChromeLatestReleaseFinder
+	internal interface ILatestDriverVersionFinder
 	{
 		Task<string> Find();
 	}

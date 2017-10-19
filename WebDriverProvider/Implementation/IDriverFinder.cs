@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace WebDriverProvider.Implementation
 {
-	internal interface IDriverVersionFinder
+	internal interface IDriverFinder
 	{
-		Task<Uri> FindDriverUrl();
+		Task<WebDriverInfo> FindDriverInfo();
 	}
 }

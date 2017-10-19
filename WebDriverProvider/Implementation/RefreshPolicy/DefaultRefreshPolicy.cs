@@ -11,9 +11,9 @@ namespace WebDriverProvider.Implementation.RefreshPolicy
 			_fileSystemWrapper = fileSystemWrapper;
 		}
 
-		public bool ShouldDownload(string driverFileName, DirectoryInfo downloadDirectory)
+		public bool ShouldDownload(IWebDriverInfo newDriverInfo, DirectoryInfo downloadDirectory)
 		{
-			var fileExists = _fileSystemWrapper.FileExists(driverFileName, downloadDirectory);
+			var fileExists = _fileSystemWrapper.FileExists(newDriverInfo.DriverFileName, downloadDirectory);
 			var shouldDownload = !fileExists;
 			return shouldDownload;
 		}

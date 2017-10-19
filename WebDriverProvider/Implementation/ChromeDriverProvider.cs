@@ -5,19 +5,19 @@ namespace WebDriverProvider.Implementation
 {
 	internal class ChromeDriverProvider : IDriverProvider
 	{
-		private readonly IDriverVersionFinder _driverVersionFinder;
+		private readonly IDriverFinder _driverFinder;
 		private readonly IDriverDownloader _driverDownloader;
 		private readonly IFileSystemWrapper _fileSystemWrapper;
 		private readonly IRefreshPolicy _refreshPolicy;
 
 		public ChromeDriverProvider(
-			IDriverVersionFinder driverVersionFinder, 
+			IDriverFinder driverFinder, 
 			IDriverDownloader driverDownloader, 
 			IFileSystemWrapper fileSystemWrapper, 
 			IRefreshPolicy refreshPolicy
 		)
 		{
-			_driverVersionFinder = driverVersionFinder;
+			_driverFinder = driverFinder;
 			_driverDownloader = driverDownloader;
 			_fileSystemWrapper = fileSystemWrapper;
 			_refreshPolicy = refreshPolicy;
@@ -25,12 +25,12 @@ namespace WebDriverProvider.Implementation
 
 		public async Task<DirectoryInfo> GetDriverBinary()
 		{
-			var driverUrl = await _driverVersionFinder.FindDriverUrl();
+			var driverInfo = await _driverFinder.FindDriverInfo();
 			var currentDirectory = _fileSystemWrapper.GetCurrentDirectory();
-			var shouldDownload = _refreshPolicy.ShouldDownload("", new DirectoryInfo("c:\\"));
+			var shouldDownload = _refreshPolicy.ShouldDownload(driverInfo, new DirectoryInfo("c:\\"));
 			if (shouldDownload)
 			{
-				var driverLocation = await _driverDownloader.Download(driverUrl, currentDirectory);
+				var driverLocation = await _driverDownloader.Download(driverInfo.DownloadUrl, currentDirectory);
 				var driverDirectory = Path.GetDirectoryName(driverLocation.FullName);
 				return new DirectoryInfo(driverDirectory);
 			}

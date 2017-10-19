@@ -16,7 +16,7 @@ namespace WebDriverProvider
 	    private RefreshPolicy _refreshPolicy;
 	    private IHttpClientWrapper _httpClientWrapper;
 	    private IFileSystemWrapper _fileSystemWrapper;
-	    private IDriverVersionFinder _driverVersionFinder;
+	    private IDriverFinder _driverFinder;
 	    private IRefreshPolicy _refreshPolicyObject;
 	    private IDriverDownloader _driverDownloader;
 	    private IDriverProvider _provider;
@@ -77,19 +77,19 @@ namespace WebDriverProvider
 
 	    private void BuildDriverVersionFinder()
 	    {
-		    var chromeLatestReleaseFinder = new ChromeLatestReleaseFinder(_httpClientWrapper);
+		    var chromeLatestReleaseFinder = new LatestDriverVersionFinder(_httpClientWrapper);
 		    var chromeDriverSite = new ChromeDriverSite();
 
 			if (_desiredDriver == DesiredDriver.Latest)
 		    {
-			    _driverVersionFinder = new ChromeLatestDriverVersionFinder(chromeLatestReleaseFinder, chromeDriverSite);
+			    _driverFinder = new ChromeLatestDriverFinder(chromeLatestReleaseFinder, chromeDriverSite);
 
 			}
 			else if (_desiredDriver == DesiredDriver.LatestCompatible)
 		    {
 			    var versionDetector = new ChromeVersionDetector();
 			    var releaseNotesParser = new ChromeDriverReleaseNotesParser();
-			    _driverVersionFinder = new ChromeCompatibleDriverVersionFinder(
+			    _driverFinder = new ChromeCompatibleDriverFinder(
 				    chromeLatestReleaseFinder,
 				    versionDetector,
 				    _httpClientWrapper,
@@ -111,7 +111,7 @@ namespace WebDriverProvider
 	    private void BuildChromeDriverProvider()
 	    {
 		    _provider = new ChromeDriverProvider(
-			    _driverVersionFinder,
+			    _driverFinder,
 			    _driverDownloader,
 			    _fileSystemWrapper,
 			    _refreshPolicyObject

@@ -8,23 +8,23 @@ namespace WebDriverProvider.Tests.Unit
 {
 	public class CompatibleDriverVersionFinderTests
 	{
-		private Mock<IChromeVersionDetector> _versionDetector;
-		private Mock<IChromeLatestReleaseFinder> _releaseFinder;
+		private Mock<IBrowserVersionDetector> _versionDetector;
+		private Mock<ILatestDriverVersionFinder> _latestVersionFinder;
 		private Mock<IHttpClientWrapper> _httpClientWrapper;
 		private Mock<IChromeDriverReleaseNotesParser> _releaseNotesParser;
 		private Mock<IChromeDriverSite> _chromeDriverSite;
-		private ChromeCompatibleDriverVersionFinder _versionFinder;
+		private ChromeCompatibleDriverFinder _finder;
 
 		[SetUp]
 		public void Setup()
 		{
-			_versionDetector = new Mock<IChromeVersionDetector>();
-			_releaseFinder = new Mock<IChromeLatestReleaseFinder>();
+			_versionDetector = new Mock<IBrowserVersionDetector>();
+			_latestVersionFinder = new Mock<ILatestDriverVersionFinder>();
 			_httpClientWrapper = new Mock<IHttpClientWrapper>();
 			_releaseNotesParser = new Mock<IChromeDriverReleaseNotesParser>();
 			_chromeDriverSite = new Mock<IChromeDriverSite>();
-			_versionFinder = new ChromeCompatibleDriverVersionFinder(
-				_releaseFinder.Object, 
+			_finder = new ChromeCompatibleDriverFinder(
+				_latestVersionFinder.Object, 
 				_versionDetector.Object, 
 				_httpClientWrapper.Object,
 				_releaseNotesParser.Object,
@@ -36,20 +36,20 @@ namespace WebDriverProvider.Tests.Unit
 		public async Task should_get_release_notes_of_latest_driver_version()
 		{
 			//given
-			var latestRelease = "2.33";
-			_releaseFinder.Setup(s => s.Find()).ReturnsAsync(latestRelease);
+			var latestVersion = "2.33";
+			_latestVersionFinder.Setup(s => s.Find()).ReturnsAsync(latestVersion);
 
 			var releaseNotesUrl = new Uri("http://google.com/releasenotes.txt");
 			_chromeDriverSite.Setup(s => s.GetReleaseNotesUrl(It.IsAny<string>()))
 				.Returns(releaseNotesUrl);
 
 			//when
-			await _versionFinder.FindDriverUrl();
+			await _finder.FindDriverInfo();
 
 			//then
 			_httpClientWrapper.Verify(v => v.GetStringAsync(releaseNotesUrl));
-			_chromeDriverSite.Verify(v => v.GetReleaseNotesUrl(latestRelease));
-			_releaseFinder.Verify(v => v.Find());
+			_chromeDriverSite.Verify(v => v.GetReleaseNotesUrl(latestVersion));
+			_latestVersionFinder.Verify(v => v.Find());
 		}
 		
 		[Test]
@@ -67,7 +67,7 @@ namespace WebDriverProvider.Tests.Unit
 			_versionDetector.Setup(v => v.Detect()).Returns(detectedChromeVersion);
 
 			//when
-			await _versionFinder.FindDriverUrl();
+			await _finder.FindDriverInfo();
 
 			//then
 			_releaseNotesParser.Verify(v => v.FindCompatibleDriverVersion(releaseNotes, detectedChromeVersion));
@@ -86,10 +86,11 @@ namespace WebDriverProvider.Tests.Unit
 				.Returns(driverZipUrl);
 
 			//when
-			var result = await _versionFinder.FindDriverUrl();
+			var result = await _finder.FindDriverInfo();
 
 			//then
-			Assert.That(result, Is.EqualTo(driverZipUrl));
+			Assert.That(result.DownloadUrl, Is.EqualTo(driverZipUrl));
+			Assert.That(result.Version, Is.EqualTo(compatibleVersion));
 			_chromeDriverSite.Verify(s => s.GetDriverZipUrl(compatibleVersion));
 		}
 	}

@@ -1,39 +1,40 @@
-using System;
 using System.Threading.Tasks;
 
 namespace WebDriverProvider.Implementation
 {
-	internal class ChromeCompatibleDriverVersionFinder : IDriverVersionFinder
+	internal class ChromeCompatibleDriverFinder : IDriverFinder
 	{
-		private readonly IChromeLatestReleaseFinder _releasefinder;
-		private readonly IChromeVersionDetector _versionDetector;
+		private readonly ILatestDriverVersionFinder _latestDriverVersionfinder;
+		private readonly IBrowserVersionDetector _versionDetector;
 		private readonly IHttpClientWrapper _httpClientWrapper;
 		private readonly IChromeDriverReleaseNotesParser _releaseNotesParser;
 		private readonly IChromeDriverSite _chromeDriverSite;
 
-		public ChromeCompatibleDriverVersionFinder(
-			IChromeLatestReleaseFinder releasefinder, 
-			IChromeVersionDetector versionDetector, 
+		public ChromeCompatibleDriverFinder(
+			ILatestDriverVersionFinder latestDriverVersionfinder, 
+			IBrowserVersionDetector versionDetector, 
 			IHttpClientWrapper httpClientWrapper, 
 			IChromeDriverReleaseNotesParser releaseNotesParser, 
 			IChromeDriverSite chromeDriverSite
 		)
 		{
-			_releasefinder = releasefinder;
+			_latestDriverVersionfinder = latestDriverVersionfinder;
 			_versionDetector = versionDetector;
 			_httpClientWrapper = httpClientWrapper;
 			_releaseNotesParser = releaseNotesParser;
 			_chromeDriverSite = chromeDriverSite;
 		}
 
-		public async Task<Uri> FindDriverUrl()
+		public async Task<WebDriverInfo> FindDriverInfo()
 		{
-			var latestRelease = await _releasefinder.Find();
-			var latestReleaseNotesUrl = _chromeDriverSite.GetReleaseNotesUrl(latestRelease);
+			var latestVersion = await _latestDriverVersionfinder.Find();
+			var latestReleaseNotesUrl = _chromeDriverSite.GetReleaseNotesUrl(latestVersion);
 			var releaseNotes = await _httpClientWrapper.GetStringAsync(latestReleaseNotesUrl);
 			var browserVersion = _versionDetector.Detect();
 			var compatibleVersion = _releaseNotesParser.FindCompatibleDriverVersion(releaseNotes, browserVersion);
-			return _chromeDriverSite.GetDriverZipUrl(compatibleVersion);
+			var driverUrl = _chromeDriverSite.GetDriverZipUrl(compatibleVersion);
+			var result = new WebDriverInfo(driverUrl, compatibleVersion);
+			return result;
 		}
 	}
 }

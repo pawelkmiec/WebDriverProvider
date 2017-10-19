@@ -1,6 +1,6 @@
 namespace WebDriverProvider.Implementation
 {
-	internal interface IChromeVersionDetector
+	internal interface IBrowserVersionDetector
 	{
 		string Detect();
 	}

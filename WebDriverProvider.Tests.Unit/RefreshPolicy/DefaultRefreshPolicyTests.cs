@@ -12,6 +12,7 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 		private DefaultRefreshPolicy _policy;
 		private string _driverFileName;
 		private DirectoryInfo _downloadDirectory;
+		private Mock<IWebDriverInfo> _driverInfo;
 
 		[SetUp]
 		public void Setup()
@@ -19,6 +20,8 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 			_fileSystemWrapper = new Mock<IFileSystemWrapper>();
 			_policy = new DefaultRefreshPolicy(_fileSystemWrapper.Object);
 			_driverFileName = "chromedriver.exe";
+			_driverInfo = new Mock<IWebDriverInfo>();
+			_driverInfo.SetupGet(s => s.DriverFileName).Returns(_driverFileName);
 			_downloadDirectory = new DirectoryInfo("c:\\temp");
 		}
 
@@ -29,7 +32,7 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 			_fileSystemWrapper.Setup(s => s.FileExists(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Returns(true);
 
 			//when
-			var result = _policy.ShouldDownload(_driverFileName, _downloadDirectory);
+			var result = _policy.ShouldDownload(_driverInfo.Object, _downloadDirectory);
 			
 			//then
 			Assert.That(result, Is.False);
@@ -43,12 +46,11 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 			_fileSystemWrapper.Setup(s => s.FileExists(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Returns(false);
 
 			//when
-			var result = _policy.ShouldDownload(_driverFileName, _downloadDirectory);
+			var result = _policy.ShouldDownload(_driverInfo.Object, _downloadDirectory);
 
 			//then
 			Assert.That(result, Is.True);
 			_fileSystemWrapper.Verify(v => v.FileExists(_driverFileName, _downloadDirectory));
 		}
 	}
-
 }
