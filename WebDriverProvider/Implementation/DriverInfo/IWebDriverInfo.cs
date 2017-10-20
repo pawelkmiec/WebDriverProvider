@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebDriverProvider.Implementation
+namespace WebDriverProvider.Implementation.DriverInfo
 {
 	internal interface IWebDriverInfo
 	{
@@ -10,6 +10,6 @@ namespace WebDriverProvider.Implementation
 
 		string Version { get; }
 
-		string GetDriverVersion(IShellCommandExecutor commandExecutor);
+		DriverVersion GetDriverVersion(IShellCommandExecutor commandExecutor);
 	}
 }

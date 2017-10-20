@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 
-namespace WebDriverProvider.Implementation
+namespace WebDriverProvider.Implementation.DriverInfo
 {
-	internal class WebDriverInfo : IWebDriverInfo
+	internal class RemoteChromeDriverInfo : IWebDriverInfo
 	{
-		public WebDriverInfo(Uri downloadUrl, string version)
+		public RemoteChromeDriverInfo(Uri downloadUrl, string version)
 		{
 			DownloadUrl = downloadUrl;
 			Version = version;
@@ -16,7 +16,7 @@ namespace WebDriverProvider.Implementation
 
 		public string Version { get; }
 
-		public string GetDriverVersion(IShellCommandExecutor commandExecutor)
+		public DriverVersion GetDriverVersion(IShellCommandExecutor commandExecutor)
 		{
 			// "chromedriver.exe --version"
 			throw new NotImplementedException();

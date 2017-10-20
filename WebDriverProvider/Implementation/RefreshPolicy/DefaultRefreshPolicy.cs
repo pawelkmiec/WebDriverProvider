@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using WebDriverProvider.Implementation.DriverInfo;
 
 namespace WebDriverProvider.Implementation.RefreshPolicy
 {

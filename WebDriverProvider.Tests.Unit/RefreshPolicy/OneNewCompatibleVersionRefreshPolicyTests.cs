@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using Moq;
 using NUnit.Framework;
 using WebDriverProvider.Implementation;
+using WebDriverProvider.Implementation.DriverInfo;
+using WebDriverProvider.Implementation.RefreshPolicy;
 
 namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 {
@@ -20,8 +21,9 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 			_shellCommandExecutor = new Mock<IShellCommandExecutor>();
 			_onNewCompatibleVersionRefreshPolicy = new OnNewCompatibleVersionRefreshPolicy(_shellCommandExecutor.Object);
 
-			_driverInfo.Setup(v => v.GetDriverVersion(It.IsAny<IShellCommandExecutor>())).Returns("2.15");
+			_driverInfo.Setup(v => v.GetDriverVersion(It.IsAny<IShellCommandExecutor>())).Returns(new DriverVersion(2, 15));
 			_driverInfo.SetupGet(s => s.Version).Returns("2.51");
+			_shellCommandExecutor.Setup(s => s.Execute(It.IsAny<string>())).Returns("2.12");
 		}
 
 		[Test]
@@ -43,9 +45,9 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 		{
 			//given
 			_driverInfo.Setup(v => v.GetDriverVersion(It.IsAny<IShellCommandExecutor>()))
-				.Returns("2.10");
+				.Returns(new DriverVersion(2, 12));
 
-			_driverInfo.SetupGet(s => s.Version).Returns("2.12");
+			_shellCommandExecutor.Setup(s => s.Execute(It.IsAny<string>())).Returns("2.10");
 
 			//when
 			var result = _onNewCompatibleVersionRefreshPolicy.ShouldDownload(_driverInfo.Object, new DirectoryInfo("c:\\foo"));
@@ -59,9 +61,9 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 		{
 			//given
 			_driverInfo.Setup(v => v.GetDriverVersion(It.IsAny<IShellCommandExecutor>()))
-				.Returns("2.12");
+				.Returns(new DriverVersion(2, 12));
 
-			_driverInfo.SetupGet(s => s.Version).Returns("2.12");
+			_shellCommandExecutor.Setup(s => s.Execute(It.IsAny<string>())).Returns("2.12");
 
 			//when
 			var result = _onNewCompatibleVersionRefreshPolicy.ShouldDownload(_driverInfo.Object, new DirectoryInfo("c:\\foo"));
@@ -70,6 +72,4 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 			Assert.That(result, Is.False);
 		}
 	}
-
-	
 }

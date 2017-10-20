@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using WebDriverProvider.Implementation;
+using WebDriverProvider.Implementation.DriverInfo;
 using WebDriverProvider.Implementation.RefreshPolicy;
 
 namespace WebDriverProvider.Tests.Unit.RefreshPolicy

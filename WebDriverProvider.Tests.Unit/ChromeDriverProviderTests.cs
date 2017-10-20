@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WebDriverProvider.Implementation;
+using WebDriverProvider.Implementation.DriverInfo;
 
 namespace WebDriverProvider.Tests.Unit
 {
@@ -31,7 +32,7 @@ namespace WebDriverProvider.Tests.Unit
 
 			var driverVersion = "2.33";
 			var driverUrl = new Uri("http://google.com/chromedriver.zip");
-			var driverInfo = new WebDriverInfo(driverUrl, driverVersion);
+			var driverInfo = new RemoteChromeDriverInfo(driverUrl, driverVersion);
 			_driverVersion.Setup(s => s.FindDriverInfo()).ReturnsAsync(driverInfo);
 
 			var currentDirectory = new DirectoryInfo(@"c:\\foo");
@@ -60,7 +61,7 @@ namespace WebDriverProvider.Tests.Unit
 			//given
 			var driverVersion = "2.33";
 			var driverUrl = new Uri("http://google.com/chrome-driver-2.32");
-			var driverInfo = new WebDriverInfo(driverUrl, driverVersion);
+			var driverInfo = new RemoteChromeDriverInfo(driverUrl, driverVersion);
 			_driverVersion.Setup(s => s.FindDriverInfo()).ReturnsAsync(driverInfo);
 
 			var currentDirectory = new DirectoryInfo(@"c:\\temp");

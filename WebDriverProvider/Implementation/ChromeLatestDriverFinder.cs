@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using WebDriverProvider.Implementation.DriverInfo;
 
 namespace WebDriverProvider.Implementation
 {
@@ -13,11 +14,11 @@ namespace WebDriverProvider.Implementation
 			_chromeDriverSite = chromeDriverSite;
 		}
 
-		public async Task<WebDriverInfo> FindDriverInfo()
+		public async Task<IWebDriverInfo> FindDriverInfo()
 		{
 			var latestVersion = await _latestDriverVersionFinder.Find();
 			var driverUrl = _chromeDriverSite.GetDriverZipUrl(latestVersion);
-			var result = new WebDriverInfo(driverUrl, latestVersion);
+			var result = new RemoteChromeDriverInfo(driverUrl, latestVersion);
 			return result;
 		}
 	}

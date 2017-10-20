@@ -1,10 +1,10 @@
-using System;
 using System.Threading.Tasks;
+using WebDriverProvider.Implementation.DriverInfo;
 
 namespace WebDriverProvider.Implementation
 {
 	internal interface IDriverFinder
 	{
-		Task<WebDriverInfo> FindDriverInfo();
+		Task<IWebDriverInfo> FindDriverInfo();
 	}
 }
