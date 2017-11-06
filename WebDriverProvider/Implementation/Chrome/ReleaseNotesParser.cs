@@ -2,9 +2,9 @@
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace WebDriverProvider.Implementation
+namespace WebDriverProvider.Implementation.Chrome
 {
-	internal class ChromeDriverReleaseNotesParser : IChromeDriverReleaseNotesParser
+	internal class ReleaseNotesParser : IReleaseNotesParser
 	{
 		public string FindCompatibleDriverVersion(string releaseNotes, string requiredChromeVersion)
 		{

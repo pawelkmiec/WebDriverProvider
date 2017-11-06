@@ -2,8 +2,8 @@
 using Moq;
 using NUnit.Framework;
 using WebDriverProvider.Implementation;
-using WebDriverProvider.Implementation.DriverInfo;
 using WebDriverProvider.Implementation.RefreshPolicy;
+using WebDriverProvider.Implementation.Utilities;
 
 namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 {
@@ -13,7 +13,8 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 		private DefaultRefreshPolicy _policy;
 		private string _driverFileName;
 		private DirectoryInfo _downloadDirectory;
-		private Mock<IWebDriverInfo> _driverInfo;
+		private Mock<IWebDriverInfo> _remoteDriverInfo;
+		private Mock<IWebDriverInfo> _localDriverInfo;
 
 		[SetUp]
 		public void Setup()
@@ -21,9 +22,10 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 			_fileSystemWrapper = new Mock<IFileSystemWrapper>();
 			_policy = new DefaultRefreshPolicy(_fileSystemWrapper.Object);
 			_driverFileName = "chromedriver.exe";
-			_driverInfo = new Mock<IWebDriverInfo>();
-			_driverInfo.SetupGet(s => s.DriverFileName).Returns(_driverFileName);
+			_remoteDriverInfo = new Mock<IWebDriverInfo>();
+			_remoteDriverInfo.SetupGet(s => s.DriverFileName).Returns(_driverFileName);
 			_downloadDirectory = new DirectoryInfo("c:\\temp");
+			_localDriverInfo = new Mock<IWebDriverInfo>();
 		}
 
 		[Test]
@@ -31,9 +33,10 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 		{
 			//given
 			_fileSystemWrapper.Setup(s => s.FileExists(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Returns(true);
+			var emptyLocalDriver = Option.None<IWebDriverInfo>();
 
 			//when
-			var result = _policy.ShouldDownload(_driverInfo.Object, _downloadDirectory);
+			var result = _policy.ShouldDownload(_remoteDriverInfo.Object, emptyLocalDriver);
 			
 			//then
 			Assert.That(result, Is.False);
@@ -45,9 +48,10 @@ namespace WebDriverProvider.Tests.Unit.RefreshPolicy
 		{
 			//given
 			_fileSystemWrapper.Setup(s => s.FileExists(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Returns(false);
+			var someLocalDriver = Option.Some(_localDriverInfo.Object);
 
 			//when
-			var result = _policy.ShouldDownload(_driverInfo.Object, _downloadDirectory);
+			var result = _policy.ShouldDownload(_remoteDriverInfo.Object, someLocalDriver);
 
 			//then
 			Assert.That(result, Is.True);

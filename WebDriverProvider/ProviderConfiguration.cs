@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using WebDriverProvider.Implementation;
-using WebDriverProvider.Implementation.RefreshPolicy;
+using WebDriverProvider.Implementation.Chrome;
+using WebDriverProvider.Implementation.Utilities;
 
 namespace WebDriverProvider
 {
@@ -13,13 +14,13 @@ namespace WebDriverProvider
 
 		private Browser _browser;
 	    private DesiredDriver _desiredDriver;
-	    private RefreshPolicy _refreshPolicy;
 	    private IHttpClientWrapper _httpClientWrapper;
 	    private IFileSystemWrapper _fileSystemWrapper;
-	    private IDriverFinder _driverFinder;
-	    private IRefreshPolicy _refreshPolicyObject;
+	    private IRemoteDriverFinder _remoteDriverFinder;
+	    private ILocalDriverFinder _localDriverFinder;
 	    private IDriverDownloader _driverDownloader;
 	    private IDriverProvider _provider;
+	    private IShellCommandExecutor _shellCommandExecutor;
 
 	    private ProviderConfiguration(Browser browser)
 	    {
@@ -32,19 +33,14 @@ namespace WebDriverProvider
 			return this;
 	    }
 
-	    public ProviderConfiguration WithRefreshPolicy(RefreshPolicy refreshPolicy)
-	    {
-		    _refreshPolicy = refreshPolicy;
-			return this;
-	    }
-
 		public IDriverProvider BuildDriverProvider()
 		{
 			BuildFileSystemWrapper();
 			BuildHttpClientWrapper();
-			CreateRefreshPolicy();
-			BuildDriverVersionFinder();
+			BuildShellCommandExecutor();
 			BuildDownloader();
+			BuildRemoteDriverFinder();
+			BuildLocalDriverFinder();
 			BuildChromeDriverProvider();
 			return _provider;
 	    }
@@ -59,42 +55,33 @@ namespace WebDriverProvider
 		    _httpClientWrapper = new HttpClientWrapper();
 	    }
 
-	    private void CreateRefreshPolicy()
+	    private void BuildShellCommandExecutor()
 	    {
-		    if (_refreshPolicy == RefreshPolicy.Always)
-		    {
-			    _refreshPolicyObject = new AlwaysRefreshPolicy();
-		    }
-		    else if (_refreshPolicy == RefreshPolicy.Default)
-		    {
-			    _refreshPolicyObject = new DefaultRefreshPolicy(_fileSystemWrapper);
-		    }
-		    else
-		    {
-			    throw new InvalidEnumArgumentException(nameof(_refreshPolicy));
-		    }
+			_shellCommandExecutor = new ShellCommandExecutor();
+		}
+
+	    private void BuildDownloader()
+	    {
+		    _driverDownloader = new ChromeDriverDownloader(_httpClientWrapper, _fileSystemWrapper);
 	    }
 
-	    private void BuildDriverVersionFinder()
+	    private void BuildRemoteDriverFinder()
 	    {
-		    var chromeLatestReleaseFinder = new LatestDriverVersionFinder(_httpClientWrapper);
-		    var chromeDriverSite = new ChromeDriverSite();
+		    var chromeDriverSite = new ChromeDriverSite(_httpClientWrapper);
 
 			if (_desiredDriver == DesiredDriver.Latest)
 		    {
-			    _driverFinder = new ChromeLatestDriverFinder(chromeLatestReleaseFinder, chromeDriverSite);
-
+			    _remoteDriverFinder = new ChromeLatestDriverFinder(chromeDriverSite, _driverDownloader);
 			}
 			else if (_desiredDriver == DesiredDriver.LatestCompatible)
 		    {
 			    var versionDetector = new ChromeVersionDetector();
-			    var releaseNotesParser = new ChromeDriverReleaseNotesParser();
-			    _driverFinder = new ChromeCompatibleDriverFinder(
-				    chromeLatestReleaseFinder,
+			    var releaseNotesParser = new ReleaseNotesParser();
+			    _remoteDriverFinder = new ChromeCompatibleDriverFinder(
 				    versionDetector,
-				    _httpClientWrapper,
 				    releaseNotesParser,
-				    chromeDriverSite
+				    chromeDriverSite,
+					_driverDownloader
 			    );
 			}
 		    else
@@ -103,18 +90,16 @@ namespace WebDriverProvider
 		    }
 	    }
 
-	    private void BuildDownloader()
+	    private void BuildLocalDriverFinder()
 	    {
-		    _driverDownloader = new DriverDownloader(_httpClientWrapper, _fileSystemWrapper);
-	    }
+		    _localDriverFinder= new LocalChromeDriverFinder(_fileSystemWrapper, _shellCommandExecutor);
+		}
 
-	    private void BuildChromeDriverProvider()
+		private void BuildChromeDriverProvider()
 	    {
 		    _provider = new ChromeDriverProvider(
-			    _driverFinder,
-			    _driverDownloader,
-			    _fileSystemWrapper,
-			    _refreshPolicyObject
+			    _remoteDriverFinder,
+			    _localDriverFinder
 		    );
 	    }
     }

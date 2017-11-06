@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace WebDriverProvider.Implementation
+namespace WebDriverProvider.Implementation.Utilities
 {
 	internal class HttpClientWrapper : IHttpClientWrapper
     {

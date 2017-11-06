@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WebDriverProvider.Implementation;
+using WebDriverProvider.Implementation.Utilities;
 
 namespace WebDriverProvider.Tests.Unit
 {

@@ -13,7 +13,6 @@ namespace WebDriverProvider.Tests.Integration
 			//given
 		    var driverProvider = ProviderConfiguration.For(Browser.Chrome)
 				.WithDesiredDriver(DesiredDriver.Latest)
-			    .WithRefreshPolicy(RefreshPolicy.Always)
 				.BuildDriverProvider();
 		    
 			//when
@@ -35,7 +34,6 @@ namespace WebDriverProvider.Tests.Integration
 		    //given
 		    var driverProvider = ProviderConfiguration.For(Browser.Chrome)
 			    .WithDesiredDriver(DesiredDriver.LatestCompatible)
-			    .WithRefreshPolicy(RefreshPolicy.Always)
 			    .BuildDriverProvider();
 
 			//when

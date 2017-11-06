@@ -2,6 +2,7 @@
 using System.IO;
 using NUnit.Framework;
 using WebDriverProvider.Implementation;
+using WebDriverProvider.Implementation.Chrome;
 
 namespace WebDriverProvider.Tests.Integration
 {
@@ -13,7 +14,7 @@ namespace WebDriverProvider.Tests.Integration
 			//given
 			var testFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestFiles//ChromeReleaseNotes.txt");
 			var releaseNotes = File.ReadAllText(testFilePath);
-			var releaseNotesParser = new ChromeDriverReleaseNotesParser();
+			var releaseNotesParser = new ReleaseNotesParser();
 			var requiredChromeVersion = "49";
 
 			//when

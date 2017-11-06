@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace WebDriverProvider.Implementation
@@ -26,6 +27,23 @@ namespace WebDriverProvider.Implementation
 				var majorNumberComparison = x.MajorNumber.CompareTo(y.MajorNumber);
 				if (majorNumberComparison != 0) return majorNumberComparison;
 				return x.MinorNumber.CompareTo(y.MinorNumber);
+			}
+		}
+
+		public static DriverVersion Parse(string driverVersionString)
+		{
+			var parts = driverVersionString.Split('.');
+
+			if (parts.Length == 1)
+			{
+				var majorNumber = Int32.Parse(parts[0]);
+				return new DriverVersion(majorNumber, 0);
+			}
+			else
+			{
+				var majorNumber = Int32.Parse(parts[0]);
+				var minorNumber = Int32.Parse(parts[1]);
+				return new DriverVersion(majorNumber, minorNumber);
 			}
 		}
 	}

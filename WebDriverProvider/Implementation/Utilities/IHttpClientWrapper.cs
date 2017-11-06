@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace WebDriverProvider.Implementation
+namespace WebDriverProvider.Implementation.Utilities
 {
 	internal interface IHttpClientWrapper
 	{

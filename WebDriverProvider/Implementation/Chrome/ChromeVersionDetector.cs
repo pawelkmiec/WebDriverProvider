@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.Win32;
 
-namespace WebDriverProvider.Implementation
+namespace WebDriverProvider.Implementation.Chrome
 {
 	internal class ChromeVersionDetector : IBrowserVersionDetector
     {

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WebDriverProvider.Implementation;
+using WebDriverProvider.Implementation.Utilities;
 
 namespace WebDriverProvider.Tests.Integration
 {

@@ -6,6 +6,6 @@ namespace WebDriverProvider.Implementation
 {
 	internal interface IDriverDownloader
 	{
-		Task<FileInfo> Download(Uri driverUrl, DirectoryInfo downloadDirectory);
+		Task<Stream> Download(Uri driverUrl);
 	}
 }

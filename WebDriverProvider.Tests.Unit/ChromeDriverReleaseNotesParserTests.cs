@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using WebDriverProvider.Implementation;
+using WebDriverProvider.Implementation.Chrome;
 
 namespace WebDriverProvider.Tests.Unit
 {
