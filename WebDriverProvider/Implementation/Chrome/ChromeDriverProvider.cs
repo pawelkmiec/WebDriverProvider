@@ -19,9 +19,8 @@ namespace WebDriverProvider.Implementation.Chrome
 
 		public async Task DownloadDriverBinary(string targetDirectory)
 		{
-			var remoteWebDriver = await _remoteLocalDriverFinder.FindDriverInfo();
+            var remoteWebDriver = await _remoteLocalDriverFinder.FindDriverInfo();
 			var localWebDriverOption = _localLocalDriverFinder.FindDriverInfo(targetDirectory);
-
 			await localWebDriverOption.Match(
 				async localWebDriver =>
 				{
@@ -49,10 +48,16 @@ namespace WebDriverProvider.Implementation.Chrome
 		private static async Task DownloadDriver(string targetDirectory, RemoteChromeDriverInfo remoteWebDriver)
 		{
 			using (var downloadedDriver = await remoteWebDriver.Download())
-			using (var localDriverFile = File.Open(Path.Combine(targetDirectory, Constants.DriverFileName), FileMode.Create))
+			using (var localDriverFile = CreateFile(targetDirectory))
 			{
 				await downloadedDriver.CopyToAsync(localDriverFile);
 			}
 		}
+
+	    private static FileStream CreateFile(string targetDirectory)
+	    {
+	        var filePath = Path.Combine(targetDirectory, Constants.DriverFileName);
+	        return File.Open(filePath, FileMode.Create);
+	    }
 	}
 }

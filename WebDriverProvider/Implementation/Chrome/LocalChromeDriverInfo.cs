@@ -16,8 +16,8 @@ namespace WebDriverProvider.Implementation.Chrome
 
 		public DriverVersion GetDriverVersion()
 		{
-			var driverVersionString = _shellCommandExecutor.Execute(_directoryWithDriver.FullName, "chromedriver.exe --version");
-			var driverVersion = DriverVersion.Parse(driverVersionString);
+			var driverVersionString = _shellCommandExecutor.Execute(_directoryWithDriver.FullName, "chromedriver.exe", "--version");
+			var driverVersion = DriverVersion.ParseCommandLineVersionString(driverVersionString);
 			return driverVersion;
 		}
 	}

@@ -2,6 +2,6 @@
 {
 	internal interface IShellCommandExecutor
 	{
-		string Execute(string workingDirectory, string command);
+		string Execute(string workingDirectory, string command, string arguments);
 	}
 }

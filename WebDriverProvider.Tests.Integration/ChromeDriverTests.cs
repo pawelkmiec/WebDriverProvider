@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
@@ -7,7 +8,23 @@ namespace WebDriverProvider.Tests.Integration
 {
     public class ChromeDriverTests
     {
-		[Test]
+	    private readonly string _driverDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "driver-directory");
+
+	    [SetUp]
+	    public void Setup()
+	    {
+            CreateDirectoryIfNotExists(_driverDirectory);
+		}
+
+	    private static void CreateDirectoryIfNotExists(string directoryPath)
+	    {
+		    if (!Directory.Exists(directoryPath))
+		    {
+			    Directory.CreateDirectory(directoryPath);
+		    }
+	    }
+
+	    [Test]
 	    public async Task should_get_latest_chrome_driver_and_run_selenium_go_to_url()
 	    {
 			//given
@@ -16,12 +33,12 @@ namespace WebDriverProvider.Tests.Integration
 				.BuildDriverProvider();
 		    
 			//when
-		    var driverDirectory = await driverProvider.GetDriverBinary();
+			await driverProvider.DownloadDriverBinary(_driverDirectory);
 			
 			//then
 			Assert.DoesNotThrow(() =>
 			{
-				using (var driver = new ChromeDriver(driverDirectory.FullName))
+				using (var driver = new ChromeDriver(_driverDirectory))
 				{
 					driver.Navigate().GoToUrl("google.com");
 				}
@@ -37,12 +54,12 @@ namespace WebDriverProvider.Tests.Integration
 			    .BuildDriverProvider();
 
 			//when
-		    var driverDirectory = await driverProvider.GetDriverBinary();
+			await driverProvider.DownloadDriverBinary(_driverDirectory);
 
-		    //then
-		    Assert.DoesNotThrow(() =>
+			//then
+			Assert.DoesNotThrow(() =>
 		    {
-			    using (var driver = new ChromeDriver(driverDirectory.FullName))
+			    using (var driver = new ChromeDriver(_driverDirectory))
 			    {
 				    driver.Navigate().GoToUrl("google.com");
 			    }
@@ -50,8 +67,11 @@ namespace WebDriverProvider.Tests.Integration
 	    }
 
 	    //[Test]
+
 	    //public async Task driver_file_should_be_unchanged_when_driver_not_present_policy_is_applied()
+
 	    //{
+
 	    //}
-	}
+    }
 }

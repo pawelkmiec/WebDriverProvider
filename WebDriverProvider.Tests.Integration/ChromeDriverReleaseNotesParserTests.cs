@@ -9,7 +9,7 @@ namespace WebDriverProvider.Tests.Integration
 	public class ChromeDriverReleaseNotesParserTests
 	{
 		[Test]
-		public void should_return_driver_2_22_when_required_chrome_version_is_49()
+		public void should_return_driver_2_22_when_required_chrome_version_is_49_as_per_test_file()
 		{
 			//given
 			var testFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestFiles//ChromeReleaseNotes.txt");
