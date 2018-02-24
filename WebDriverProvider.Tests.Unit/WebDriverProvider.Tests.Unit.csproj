@@ -7,8 +7,8 @@
     <ProjectGuid>{7437E1ED-56CA-469E-82BE-1651C40ECC45}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NWebDriverManager.Tests.Unit</RootNamespace>
-    <AssemblyName>NWebDriverManager.Tests.Unit</AssemblyName>
+    <RootNamespace>WebDriverProvider.Tests.Unit</RootNamespace>
+    <AssemblyName>WebDriverProvider.Tests.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -56,11 +56,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChromeDriverProviderTests.cs" />
+    <Compile Include="ChromeDriverReleaseNotesParserTests.cs" />
+    <Compile Include="RefreshPolicy\DefaultRefreshPolicyTests.cs" />
     <Compile Include="DriverDownloaderTests.cs" />
     <Compile Include="LatestDriverVersionFinderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RefreshPolicy\OneNewCompatibleVersionRefreshPolicyTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompatibleDriverVersionFinderTests.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -69,5 +73,6 @@
       <Name>WebDriverProvider</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

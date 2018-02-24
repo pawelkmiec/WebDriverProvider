@@ -1,35 +1,77 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
-using WebDriverProvider.Implementation;
 
-namespace NWebDriverManager.Tests.Integration
+namespace WebDriverProvider.Tests.Integration
 {
     public class ChromeDriverTests
     {
+	    private readonly string _driverDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "driver-directory");
+
+	    [SetUp]
+	    public void Setup()
+	    {
+            CreateDirectoryIfNotExists(_driverDirectory);
+		}
+
+	    private static void CreateDirectoryIfNotExists(string directoryPath)
+	    {
+		    if (!Directory.Exists(directoryPath))
+		    {
+			    Directory.CreateDirectory(directoryPath);
+		    }
+	    }
+
 	    [Test]
-	    public async Task should_get_chrome_binary_and_run_selenium_go_to_url()
+	    public async Task should_get_latest_chrome_driver_and_run_selenium_go_to_url()
 	    {
 			//given
-		    var provider = new ChromeDriverProvider(
-				new LatestDriverVersionFinder(new HttpClientWrapper()),
-				new DriverDownloader(new HttpClientWrapper(), new FileSystemWrapper()),
-				new FileSystemWrapper()
-			);
-
-		    var binaryLocation = await provider.GetDriverBinary();
-
-		    var driverDirectory = Path.GetDirectoryName(binaryLocation.FullName);
-
+		    var driverProvider = ProviderConfiguration.For(Browser.Chrome)
+				.WithDesiredDriver(DesiredDriver.Latest)
+				.BuildDriverProvider();
+		    
 			//when
-		    var driver = new ChromeDriver(driverDirectory);
+			await driverProvider.DownloadDriverBinary(_driverDirectory);
 			
 			//then
 			Assert.DoesNotThrow(() =>
 			{
-				driver.Navigate().GoToUrl("google.com");
+				using (var driver = new ChromeDriver(_driverDirectory))
+				{
+					driver.Navigate().GoToUrl("google.com");
+				}
 			});
 		}
+
+	    [Test]
+	    public async Task should_get_compatible_chrome_driver_and_run_selenium_go_to_url()
+	    {
+		    //given
+		    var driverProvider = ProviderConfiguration.For(Browser.Chrome)
+			    .WithDesiredDriver(DesiredDriver.LatestCompatible)
+			    .BuildDriverProvider();
+
+			//when
+			await driverProvider.DownloadDriverBinary(_driverDirectory);
+
+			//then
+			Assert.DoesNotThrow(() =>
+		    {
+			    using (var driver = new ChromeDriver(_driverDirectory))
+			    {
+				    driver.Navigate().GoToUrl("google.com");
+			    }
+		    });
+	    }
+
+	    //[Test]
+
+	    //public async Task driver_file_should_be_unchanged_when_driver_not_present_policy_is_applied()
+
+	    //{
+
+	    //}
     }
 }

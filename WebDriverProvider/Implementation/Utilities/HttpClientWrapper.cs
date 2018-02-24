@@ -3,9 +3,9 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace WebDriverProvider.Implementation
+namespace WebDriverProvider.Implementation.Utilities
 {
-    public class HttpClientWrapper : IHttpClientWrapper
+	internal class HttpClientWrapper : IHttpClientWrapper
     {
 	    private readonly HttpClient _httpClient;
 
@@ -16,8 +16,7 @@ namespace WebDriverProvider.Implementation
 
 	    public async Task<string> GetStringAsync(Uri requestUrl)
 	    {
-		    var result = await _httpClient.GetStringAsync(requestUrl);
-		    return result.Trim();
+		    return await _httpClient.GetStringAsync(requestUrl);
 	    }
 
 	    public async Task<Stream> GetStreamAsync(Uri requestUrl)

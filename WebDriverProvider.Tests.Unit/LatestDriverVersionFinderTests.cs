@@ -1,47 +1,36 @@
-﻿using System;
-using System.Threading.Tasks;
-using Moq;
-using NUnit.Framework;
-using WebDriverProvider;
-using WebDriverProvider.Implementation;
+﻿//using System;
+//using System.Threading.Tasks;
+//using Moq;
+//using NUnit.Framework;
+//using WebDriverProvider.Implementation;
 
-namespace NWebDriverManager.Tests.Unit
-{
-    public class LatestDriverVersionFinderTests
-    {
-	    private LatestDriverVersionFinder _finder;
-	    private Mock<IHttpClientWrapper> _httpClientWrapper;
+//namespace WebDriverProvider.Tests.Unit
+//{
+//    public class LatestDriverVersionFinderTests
+//    {
+//	    [Test]
+//	    public async Task should_return_url_to_latest_driver_release()
+//	    {
+//			//given
+//		    var versionFinder = new Mock<ILatestDriverVersionFinder>();
+//		    var chromeDriverSite = new Mock<IChromeDriverSite>();
+//		    var driverFinder = new LatestChromeDriverFinder(versionFinder.Object, chromeDriverSite.Object);
 
-	    [SetUp]
-	    public void Setup()
-	    {
-		    _httpClientWrapper = new Mock<IHttpClientWrapper>();
-		    _finder = new LatestDriverVersionFinder(_httpClientWrapper.Object);
+//		    var latestVersion = "2.33";
+//		    versionFinder.Setup(s => s.Find()).ReturnsAsync(latestVersion);
 
-		    _httpClientWrapper.Setup(s => s.GetStringAsync(It.IsAny<Uri>())).ReturnsAsync("1.111");
-		}
+//		    var driverUrl = new Uri("http://google.com/chromedriver.zip");
+//		    chromeDriverSite.Setup(s => s.GetDriverZipUrl(It.IsAny<string>()))
+//			    .Returns(driverUrl);
 
-		[Test]
-	    public async Task should_get_latest_release()
-	    {
-			//when
-		    await _finder.GetDriverUrl();
+//			//when
+//			var result = await driverFinder.FindDriverInfo();
 
-			//then
-		    _httpClientWrapper.Verify(s => s.GetStringAsync(new Uri("http://chromedriver.storage.googleapis.com/LATEST_RELEASE")));
-	    }
-
-	    [Test]
-	    public async Task should_return_url_with_result_of_latest_release_reqiest()
-	    {
-			//given
-		    _httpClientWrapper.Setup(s => s.GetStringAsync(It.IsAny<Uri>())).ReturnsAsync("2.33");
-
-			//when
-			var driverUrl = await _finder.GetDriverUrl();
-
-			//then
-			Assert.That(driverUrl, Is.EqualTo(new Uri("http://chromedriver.storage.googleapis.com/2.33/chromedriver_win32.zip")));
-	    }
-    }
-}
+//			//then
+//			Assert.That(result.DownloadUrl, Is.EqualTo(driverUrl));
+//		    Assert.That(result.Version, Is.EqualTo(latestVersion));
+//			chromeDriverSite.Verify(v => v.GetDriverZipUrl(latestVersion));
+//		    versionFinder.Verify(s => s.Find());
+//		}
+//    }
+//}
