@@ -6,12 +6,12 @@ namespace WebDriverProvider.Tests.Unit
 {
 	public class ChromeDriverReleaseNotesParserTests
 	{
-		private ChromeDriverReleaseNotesParser _parser;
+		private ReleaseNotesParser _parser;
 
 		[SetUp]
 		public void Setup()
 		{
-			_parser = new ChromeDriverReleaseNotesParser();
+			_parser = new ReleaseNotesParser();
 		}
 
 		[Test]

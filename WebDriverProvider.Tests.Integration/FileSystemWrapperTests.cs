@@ -57,7 +57,7 @@ namespace WebDriverProvider.Tests.Integration
 		}
 
 		[Test]
-		public void FileExists_should_return_true_when_file_is_present()
+		public void should_return_true_when_file_is_present()
 		{
 			//given
 			var directory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);

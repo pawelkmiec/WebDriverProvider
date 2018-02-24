@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Aim of this library is to download proper version of web driver automatically, to help with Selenium-based testing.</Description>
+    <PackageProjectUrl>https://github.com/pawelkmiec/WebDriverProvider</PackageProjectUrl>
+    <PackageIconUrl />
+    <PackageLicenseUrl>https://github.com/pawelkmiec/WebDriverProvider/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/pawelkmiec/WebDriverProvider</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
